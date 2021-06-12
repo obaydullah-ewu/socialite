@@ -15,7 +15,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Auth\UserActivationEmail' => [
+        'Illuminate\Auth\Events\Auth\UserActivationEmail' => [
             'App\Listeners\Auth\SendActivationEmail',
         ],
     ];
