@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
@@ -96,6 +98,21 @@ class LoginController extends Controller
         }
 
         Auth::login($user);
+    }
+
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => [
+                'required','string',
+                Rule::exists('users')->where(function ($query){
+                    $query->where('isVerified', true);
+                })
+            ],
+            'password' => 'required|string',
+        ], [
+            $this->username(). '.exists' => 'Email is not verified'
+        ]);
     }
 
 }
